@@ -3,6 +3,7 @@ package com.senac.aulaFull.presentation;
 
 import com.senac.aulaFull.application.dto.login.EsqueciMinhaSenhaDto;
 import com.senac.aulaFull.application.dto.login.LoginRequestDto;
+import com.senac.aulaFull.application.dto.usuario.RegistrarNovaSenhaDto;
 import com.senac.aulaFull.application.dto.usuario.UsuarioPrincipalDto;
 import com.senac.aulaFull.application.services.TokenService;
 import com.senac.aulaFull.application.services.UsuarioService;
@@ -25,38 +26,59 @@ public class AuthController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    @Operation(summary = "Login",description = "Metodo resposavel por efetuar o login do usuario ")
+    @Operation(summary = "Login", description = "Metodo resposavel por efetuar o login do usuario ")
     public ResponseEntity <?> login (@RequestBody LoginRequestDto request){
         try{
-            usuarioService.validarSenha(request);
+            var response = usuarioService.ValidarSenha(request);
 
-            var token = tokenService.gerarToken(request);
+            return ResponseEntity.ok(response);
 
-            return ResponseEntity.ok(token);
         } catch (RuntimeException e) {
+
             return  ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/recuperarSenha/envio")
-    @Operation(summary = "Recuperar senha",description = "Metodo para recuperar a senha")
+    @GetMapping("/redefinirsenha/envio")
+    @Operation(summary = "Recuperar nova senha",description = "Metodo para recuperar a senha")
     public ResponseEntity<?> recuperarSenhaEnvio(@AuthenticationPrincipal UsuarioPrincipalDto usuarioLogado){
 
-        usuarioService.recuperarSenhaEnvio(usuarioLogado);
+        usuarioService.RecuperarSenhaEnvio(usuarioLogado);
         return ResponseEntity.ok("Codigo enviado com sucesso");
+
+    }
+    @PostMapping("/redefinirsenha")
+    @Operation(summary = "Recuperar nova senha",description = "Metodo para recuperar a senha")
+    public ResponseEntity<?> recuperarSenhaEnvio(@RequestBody RegistrarNovaSenhaDto dto){
+
+        usuarioService.RegistrarNovaSenha(dto);
+        return ResponseEntity.ok("Senha atualizada com sucesso!");
 
     }
 
     @PostMapping("/esqueciminhasenha")
     @Operation(summary = "Esqueci minha senha",description = "metodo para recuperar senha")
-    public ResponseEntity<?> esqueciMinhaSenha(@RequestBody EsqueciMinhaSenhaDto esqueciMinhaSenhaDto)
-    {
+    public ResponseEntity<?> esqueciMinhaSenha(@RequestBody EsqueciMinhaSenhaDto esqueciMinhaSenhaDto) {
 
         try {
-            usuarioService.esqueciMinhaSenha(esqueciMinhaSenhaDto);
+            usuarioService.EsqueciMinhaSenha(esqueciMinhaSenhaDto);
                     return ResponseEntity.ok().build();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    @PostMapping("/registrarnovasenha")
+    @Operation(summary = "Resgistrar nova senha",description = "Método para registrar nova senha!")
+    public ResponseEntity<?> registrarNovaSenha(@RequestBody RegistrarNovaSenhaDto registrarNovaSenhaDto){
+
+        try{
+            usuarioService.RegistrarNovaSenha(registrarNovaSenhaDto);
+            return ResponseEntity.ok().build();
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
         }
     }
 

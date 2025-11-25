@@ -2,7 +2,15 @@ package com.senac.aulaFull.application.dto.usuario;
 
 import com.senac.aulaFull.domin.entites.Usuario;
 
-public record UsuarioResponseDto(Long id, String nome, String email, String CPF, String role){
+import java.time.LocalDate;
+
+public record UsuarioResponseDto(Long id,
+                                 String nome,
+                                 String email,
+                                 String CPF,
+                                 String telefone,
+                                 LocalDate dataNascimento,
+                                 String genero){
 
     public UsuarioResponseDto (Usuario usuario){
         this(
@@ -10,7 +18,9 @@ public record UsuarioResponseDto(Long id, String nome, String email, String CPF,
                 usuario.getNome(),
                 usuario.getEmail(),
                 usuario.getCpf(),
-                usuario.getRole()
+                usuario.getTelefone(),
+                usuario.getDataNascimento(),
+                usuario.getGenero()
         );
     }
 }

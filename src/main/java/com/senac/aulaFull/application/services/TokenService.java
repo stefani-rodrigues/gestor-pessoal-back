@@ -3,8 +3,9 @@ package com.senac.aulaFull.application.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.senac.aulaFull.application.dto.login.LoginRequestDto;
 import com.senac.aulaFull.application.dto.usuario.UsuarioPrincipalDto;
+import com.senac.aulaFull.domin.entites.Token;
+import com.senac.aulaFull.domin.entites.Usuario;
 import com.senac.aulaFull.domin.repository.TokenRepository;
 import com.senac.aulaFull.domin.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,33 +33,36 @@ public class TokenService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public String gerarToken (LoginRequestDto loginResquestDto){
-        var usuario = usuarioRepository.findByEmail(loginResquestDto.email()).orElse(null);
+    public String GerarToken(Usuario usuario){
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
 
         String token = JWT.create()
                 .withIssuer(emissor)
                 .withSubject(usuario.getEmail())
-                .withExpiresAt(this.gerarDataExpiracao())
+                .withExpiresAt(this.GerarDataExpiracao())
                 .sign(algorithm);
 
-       return token;
+        tokenRepository.save(new Token(null,token,usuario));
+        return token;
     }
 
-    public UsuarioPrincipalDto validarToken(String token){
+    public UsuarioPrincipalDto ValidarToken(String token){
         Algorithm algoritm = Algorithm.HMAC256(secret);
         JWTVerifier verifier = JWT.require(algoritm)
                 .withIssuer(emissor)
                 .build();
+                verifier.verify(token);
+
         var tokenResult = tokenRepository.findByToken(token).orElse(null);
+
         if (tokenResult == null){
-            throw new IllegalArgumentException("Token inválido.");
+            throw new IllegalArgumentException("Token inválido!");
         }
         return new UsuarioPrincipalDto(tokenResult.getUsuario());
     }
 
-    private Instant gerarDataExpiracao() {
+    private Instant GerarDataExpiracao() {
         var dataAtual = LocalDateTime.now();
         dataAtual = dataAtual.plusMinutes(tempo);
 

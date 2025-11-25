@@ -16,4 +16,9 @@ public class Categoria {
     private Long id;
     private String nome;
     private String cor;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
 }

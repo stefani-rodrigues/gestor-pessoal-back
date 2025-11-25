@@ -1,7 +1,6 @@
 package com.senac.aulaFull.domin.entites;
 
 import com.senac.aulaFull.application.dto.usuario.UsuarioRequestDto;
-import com.senac.aulaFull.application.dto.usuario.UsuarioResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +41,9 @@ public class Usuario implements UserDetails {
     private String senha;
     private String email;
     private String role;
+    private String telefone;
+    private LocalDate dataNascimento;
+    private String genero;
 
     private LocalDateTime dataCadastro;
 
@@ -59,12 +62,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return this.senha;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
@@ -86,8 +89,8 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-    public UsuarioResponseDto toDtoResponse() {
-        return new UsuarioResponseDto(this);
-    }
 
+
+    public void setTokenExpira(LocalDateTime localDateTime) {
+    }
 }

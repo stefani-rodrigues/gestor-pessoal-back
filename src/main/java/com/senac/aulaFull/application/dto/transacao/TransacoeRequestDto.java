@@ -6,21 +6,25 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public record TransacoeRequest(
+public record TransacoeRequestDto(
+
         @NotBlank
         String descricao,
 
         @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd")
-        Date data,
+        LocalDate data,
 
         @NotNull
         TipoTransacao tipo,
 
         @NotNull
         @Positive
-        Double valor
-) {
-}
+        Double valor,
+
+        @NotNull
+        Long categoriaId
+) {}

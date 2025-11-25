@@ -15,6 +15,8 @@ public record UsuarioPrincipalDto (Long id, String email, Collection<? extends G
                 usuario.getAuthorities()
         );
     }
+
+
 }
 
 

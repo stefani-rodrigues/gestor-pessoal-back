@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,13 +20,17 @@ public class Transacao   {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     private  String descricao;
-    private Date data;
+    private LocalDate data;
     private  Double valor;
 
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuarioId", nullable = true)
     private Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoriaId")
+    private Categoria categoria;
 }
