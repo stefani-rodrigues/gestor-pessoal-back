@@ -25,12 +25,12 @@ public interface TransacaoRepository extends JpaRepository <Transacao,Long> {
 
     @Query("""
         SELECT t.tipo AS tipo, SUM(t.valor) AS total
-        FROM Transacao t
-        WHERE t.usuario = :usuario
-        AND t.tipo= :tipo
-        AND MONTH(t.data) = :mes
-        AND YEAR(t.data) = :ano
-        GROUP BY t.tipo""")
+            FROM Transacao t
+            WHERE t.usuario = :usuario
+                AND t.tipo= :tipo
+                AND MONTH(t.data) = :mes
+                AND YEAR(t.data) = :ano
+                GROUP BY t.tipo""")
     List<SomaPorTipoResponse> buscarSomaPorTipoMes(TipoTransacao tipo, @Param("mes") int mes, @Param("ano") int ano, @Param("usuario") Usuario  usuario);
 
     @Query("""
@@ -44,15 +44,12 @@ public interface TransacaoRepository extends JpaRepository <Transacao,Long> {
 
 
     @Query("""
-            SELECT
-                t
-            FROM
-                Transacao t
-            WHERE
-                t.usuario = :usuario
-                AND MONTH(t.data) = :mes
-                AND YEAR(t.data)=:ano
-                AND (:tipo IS NULL OR t.tipo = :tipo)
+            SELECT t
+                FROM Transacao t
+                WHERE t.usuario = :usuario
+                    AND MONTH(t.data) = :mes
+                    AND YEAR(t.data)=:ano
+                    AND (:tipo IS NULL OR t.tipo = :tipo)
             """)
     List<Transacao> findByUsuarioAndMesAno(
             @Param("usuario") Usuario  usuario,
