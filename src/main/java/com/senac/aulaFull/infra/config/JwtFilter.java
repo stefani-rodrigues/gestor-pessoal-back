@@ -27,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if (path.equals("/auth/login")
                 || path.equals("/auth/cadastro")
                 || path.equals("/auth/esqueciminhasenha")
-                || path.equals("/auth/registrarnovasenha")
                 || path.equals("/auth/redefinirsenha")
                 || path.equals("/usuarios")
                 || path.startsWith("/swagger-resources")

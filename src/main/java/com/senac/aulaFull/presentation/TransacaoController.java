@@ -1,8 +1,7 @@
 package com.senac.aulaFull.presentation;
-
-
 import com.senac.aulaFull.application.dto.transacao.TransacoeRequestDto;
 import com.senac.aulaFull.application.dto.transacao.TransacoeResponseDto;
+import com.senac.aulaFull.application.dto.usuario.UsuarioPrincipalDto;
 import com.senac.aulaFull.application.services.TokenService;
 import com.senac.aulaFull.domin.entites.Transacao;
 import com.senac.aulaFull.application.services.TransacaoService;
@@ -16,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/transacoes")
-@Tag( name = "Controlador de transições", description = "Camadada responável por registrar as transições")
+@Tag( name = "Controlador de transações", description = "Camadada responável por registrar as transações")
 public class TransacaoController {
 
     @Autowired
@@ -69,7 +69,8 @@ public class TransacaoController {
             @RequestParam Integer mes,
             @RequestParam Integer ano,
             @RequestParam(required = false) TipoTransacao tipo,
-            @RequestHeader("Authorization") String authHeader){
+            @RequestHeader("Authorization") String authHeader,
+            @AuthenticationPrincipal UsuarioPrincipalDto usuarioPrincipalDto){
         Usuario usuario = getUsuarioLogado(authHeader);
         List<TransacoeResponseDto> transacoes;
 
